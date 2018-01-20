@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 
 import TodoEntry from './todoEntry';
 import TodoOverview from './todoOverview';
-import TodoFooter from './todoFooter';
+import TodoFooter from './todoFooter/todoFooter';
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
 
 import DevTool from 'mobx-react-devtools';

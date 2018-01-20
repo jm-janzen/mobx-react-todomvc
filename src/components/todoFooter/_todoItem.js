@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {pluralize} from '../utils';
-import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
+import {pluralize} from '../../utils';
+import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../../constants';
 
 @observer
-export default class TodoFooter extends React.Component {
+export default class TodoItem extends React.Component {
     render() {
         const todoStore = this.props.todoStore;
         if (!todoStore.activeTodoCount && !todoStore.completedCount)
@@ -50,7 +50,3 @@ export default class TodoFooter extends React.Component {
     };
 }
 
-TodoFooter.propTypes = {
-    viewStore: PropTypes.object.isRequired,
-    todoStore: PropTypes.object.isRequired
-}
