@@ -14,7 +14,7 @@ export default class TodoItem extends React.Component {
         const activeTodoWord = pluralize(todoStore.activeTodoCount, 'item');
 
         return (
-            <footer className="footer">
+            <div>
                 <span className="todo-count">
                     <strong>{todoStore.activeTodoCount}</strong> {activeTodoWord} left
                 </span>
@@ -31,7 +31,7 @@ export default class TodoItem extends React.Component {
                             Clear completed
                         </button>
                 }
-            </footer>
+            </div>
         );
     }
 

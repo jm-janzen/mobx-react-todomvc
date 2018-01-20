@@ -12,6 +12,25 @@ export default class TodoItem extends React.Component {
 
     render() {
         const {viewStore, todo} = this.props;
+        var labelMock = [
+            { caption: 'foo', active: false },
+            { caption: 'bar', active: false },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+            { caption: 'baz', active: true },
+        ];
+        todo.labels = labelMock;
+        /*XXX*/console.log('OINK',todo)
         return (
             <li className={[
                 todo.completed ? "completed": "",
@@ -27,7 +46,17 @@ export default class TodoItem extends React.Component {
                     <label onDoubleClick={this.handleEdit}>
                         {todo.title}
                     </label>
-                    <button className="destroy" onClick={this.handleDestroy} />
+                    { /* XXX Our labels (if any) */}
+                    <div className="labels">
+                    {
+                    todo.labels.filter(label => label.active ).map((label) =>
+                        <span>{label.caption}</span>
+                    )}
+                    </div>
+
+                    { /* XXX Our button to add new labels */}
+                    <button className="create"/>
+                    <button className="destroy" onClick={this.handleDestroy}/>
                 </div>
                 <input
                     ref="editField"
@@ -79,6 +108,10 @@ export default class TodoItem extends React.Component {
     handleToggle = () => {
         this.props.todo.toggle();
     };
+
+    /*
+     * TODO Handle label actions
+     */
 }
 
 TodoItem.propTypes = {

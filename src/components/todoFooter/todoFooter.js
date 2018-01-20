@@ -20,10 +20,10 @@ export default class TodoFooter extends React.Component {
          *  - Loop over stores objects
          */
         return (
-            <div>
+            <footer className="footer">
                 <TodoItem  todoStore={todoStore} viewStore={viewStore} />
                 <TodoLabel todoStore={todoStore} viewStore={viewStore} />
-            </div>
+            </footer>
         )
     }
 }
