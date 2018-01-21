@@ -31,7 +31,9 @@ export default class TodoLabel extends React.Component {
                     {
                         todoStore.uniqLabels.map((elem, i) =>
                             <li key={i}>
-                                <a href="#" className={elem.active ? "selected" : ""}>{elem.caption}</a>
+                                <a href="#" className={elem.active ? "selected" : ""}>
+                                    {elem.caption}
+                                </a>
                             </li>
                         )
                     }
