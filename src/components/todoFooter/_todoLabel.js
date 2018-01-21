@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 
+@observer
 export default class TodoLabel extends React.Component {
     /*
      * TODO Implement "label" buttons
@@ -11,25 +12,25 @@ export default class TodoLabel extends React.Component {
      */
     render() {
 
-        console.log("TodoLabel::render() /* [ UNIMPLEMENTED ] */");
+        const {viewStore, todoStore} = this.props;
 
-        // TODO Get uniq labels from Todo obj itself
         // Yeah, no reason labels need exist outside of Todos...except as strings
-        var labelMock = [
-            { caption: 'foo', active: false },
-            { caption: 'bar', active: false },
-            { caption: 'baz', active: true },
-        ];
+        // TODO Get uniq labels from Todo obj itself
+        // TODO Check if we actually have any labels, too
+        /*XXX*/console.log('Building global list of labels using:',todoStore.uniqLabels);
 
-        var divStyle = { marginTop: '20px' };
+        // TODO Move this to CSS
+        var divStyle = { marginTop: '30px' };
+
         return (
-            <div>
-                <ul style={divStyle} className="filters">
+            <div style={divStyle}>
+                <span className="todo-count">
+                    <strong>666</strong>/<strong>777</strong> labels selected
+                </span>
+                <ul className="filters labels">
                     {
-                        /* TODO Replace with actual label names */
-                        /* TODO Include key prop */
-                        labelMock.map((elem) =>
-                            <li>
+                        todoStore.uniqLabels.map((elem, i) =>
+                            <li key={i}>
                                 <a href="#" className={elem.active ? "selected" : ""}>{elem.caption}</a>
                             </li>
                         )

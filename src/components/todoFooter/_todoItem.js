@@ -4,6 +4,10 @@ import {observer} from 'mobx-react';
 import {pluralize} from '../../utils';
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../../constants';
 
+/*
+ * TODO Rename this child component - we already have a TodoItem up a level
+ */
+
 @observer
 export default class TodoItem extends React.Component {
     render() {
@@ -23,6 +27,8 @@ export default class TodoItem extends React.Component {
                     {this.renderFilterLink(ACTIVE_TODOS, "active", "Active")}
                     {this.renderFilterLink(COMPLETED_TODOS, "completed", "Completed")}
                 </ul>
+                {/* FIXME The styling on this item is broken (repro: mark a todo item
+                  * as "completed" */}
                 { todoStore.completedCount === 0
                     ? null
                     :     <button

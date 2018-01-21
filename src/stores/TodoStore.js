@@ -17,6 +17,30 @@ export default class TodoStore {
         return this.todos.length - this.activeTodoCount;
     }
 
+    // Just drill down to individual getters on our todos
+    // XXX Is dereferencing here breaking our store on refresh ?
+    @computed get uniqLabels () {
+        var seen = [];
+        var uniqLabels = [];
+
+        // XXX There's got to be a more semantic way to do this ...
+        this.todos.filter(todo => {
+            todo.uniqLabels.filter(label => {
+                if (seen.includes(label.caption)) return false
+
+                seen.push(label.caption)
+                uniqLabels.push(label)
+            })
+        });
+
+        return uniqLabels;
+
+        // Collect our unique labels for each todo
+        var a = this.todos.map(todo => todo.uniqLabels)
+
+        return [{caption:'TEST',active:true}];  // XXX Testing
+    }
+
     subscribeServerToStore() {
         reaction(
             () => this.toJS(),

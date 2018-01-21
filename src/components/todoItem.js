@@ -11,26 +11,8 @@ export default class TodoItem extends React.Component {
     @observable editText = "";
 
     render() {
-        const {viewStore, todo} = this.props;
-        var labelMock = [
-            { caption: 'foo', active: false },
-            { caption: 'bar', active: false },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-            { caption: 'baz', active: true },
-        ];
-        todo.labels = labelMock;
-        /*XXX*/console.log('OINK',todo)
+        const {viewStore, todo, todoStore} = this.props;
+
         return (
             <li className={[
                 todo.completed ? "completed": "",
@@ -46,16 +28,16 @@ export default class TodoItem extends React.Component {
                     <label onDoubleClick={this.handleEdit}>
                         {todo.title}
                     </label>
-                    { /* XXX Our labels (if any) */}
+                    { /* Our labels (if any) */}
                     <div className="labels">
                     {
-                    todo.labels.filter(label => label.active ).map((label) =>
-                        <span>{label.caption}</span>
-                    )}
+                        todo.uniqLabels.filter(label => label.active ).map((label, i) =>
+                            <span key={i}>{label.caption}</span>)
+                    }
                     </div>
 
                     { /* XXX Our button to add new labels */}
-                    <button className="create"/>
+                    <button className="create" onClick={this.handleLabelPrompt}/>
                     <button className="destroy" onClick={this.handleDestroy}/>
                 </div>
                 <input
@@ -68,6 +50,21 @@ export default class TodoItem extends React.Component {
                 />
             </li>
         );
+    }
+
+    // TODO Handle update, delete (no text in label)
+    handleSubmitLabel = (event) => {
+        return null
+    }
+
+    // New label alert input
+    handleLabelPrompt = () => {
+        var val = prompt("Enter new label");
+        if (val) {
+            this.props.todo.addLabel(val, true);  // XXX This does not update view
+        } else {  // TODO Handle destroy label
+            pass;
+        }
     }
 
     handleSubmit = (event) => {
@@ -108,10 +105,6 @@ export default class TodoItem extends React.Component {
     handleToggle = () => {
         this.props.todo.toggle();
     };
-
-    /*
-     * TODO Handle label actions
-     */
 }
 
 TodoItem.propTypes = {

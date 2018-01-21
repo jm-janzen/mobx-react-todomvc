@@ -18,6 +18,8 @@ export default class TodoFooter extends React.Component {
          * TODO: Investigate best-practice:
          *  - Pass entire store (rename class, gross)
          *  - Loop over stores objects
+         *
+         *  NOTE: Both of these will require ref to labels/tags
          */
         return (
             <footer className="footer">
