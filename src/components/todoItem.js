@@ -31,7 +31,7 @@ export default class TodoItem extends React.Component {
                     { /* Our labels (if any) */}
                     <div className="labels">
                     {
-                        todo.uniqLabels.filter(label => label.active ).map((label, i) =>
+                        todo.uniqLabels.map((label, i) =>
                             <span key={i}>{label.caption}</span>)
                     }
                     </div>
