@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
+import {pluralize} from '../../utils';
 
 @observer
 export default class TodoLabel extends React.Component {
@@ -22,10 +23,19 @@ export default class TodoLabel extends React.Component {
         // TODO Move this to CSS
         var divStyle = { marginTop: '30px' };
 
+        const activeLabelWord = pluralize(todoStore.labelCount, 'label');
+
         return (
             <div style={divStyle}>
                 <span className="todo-count">
-                    <strong>666</strong>/<strong>777</strong> labels selected
+                    <strong>
+                        {todoStore.labelCount}
+                    </strong>
+                    <span>/</span>
+                    <strong>
+                        {todoStore.activeLabelCount + ' '}
+                    </strong>
+                    {activeLabelWord} selected
                 </span>
                 <ul className="filters labels">
                     {

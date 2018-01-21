@@ -17,6 +17,14 @@ export default class TodoStore {
         return this.todos.length - this.activeTodoCount;
     }
 
+    @computed get labelCount() {
+        return this.uniqLabels.length;
+    }
+
+    @computed get activeLabelCount() {
+        return this.uniqLabels.filter(l=> l.active).length;
+    }
+
     // Just drill down to individual getters on our todos
     // XXX Is dereferencing here breaking our store on refresh ?
     @computed get uniqLabels () {
@@ -34,11 +42,6 @@ export default class TodoStore {
         });
 
         return uniqLabels;
-
-        // Collect our unique labels for each todo
-        var a = this.todos.map(todo => todo.uniqLabels)
-
-        return [{caption:'TEST',active:true}];  // XXX Testing
     }
 
     subscribeServerToStore() {

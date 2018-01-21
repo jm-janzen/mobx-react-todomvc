@@ -24,6 +24,7 @@ export default class TodoFooter extends React.Component {
         return (
             <footer className="footer">
                 <TodoFilter todoStore={todoStore} viewStore={viewStore} />
+                {/* TODO Add some style hr elem here */}
                 <TodoLabel  todoStore={todoStore} viewStore={viewStore} />
             </footer>
         )
