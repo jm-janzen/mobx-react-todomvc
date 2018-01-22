@@ -1,6 +1,7 @@
 import {observable, computed, reaction} from 'mobx';
 import TodoModel from '../models/TodoModel'
 import * as Utils from '../utils';
+import util from 'util';
 import { ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
 
 
@@ -52,7 +53,7 @@ export default class TodoStore {
     // This view/store coupling feels bad ...
     getVisibleTodos(view) {
 
-        var totalActiveLabels = this.uniqLabels.filter(l => l.active).length > 0;
+        var totalActiveLabels = this.uniqLabels.filter(l => l.active);
 
         return this.todos.filter(todo => {
 
@@ -70,9 +71,14 @@ export default class TodoStore {
              *  1. no global labels defined at all
              *  2. no global labels are active
              *  3. this individual Item has a label which is active
+             *
+             *  FIXME Duplicate labels are not detected (only on last item added)
              */
-            var hasActiveLabel = todo.labels.filter(l => l.active).length > 0;
-            if ( !hasActiveLabel && this.uniqLabels.length > 0 && totalActiveLabels) {
+            var activeLabels = todo.labels.filter(l => l.active);
+
+            if ( activeLabels.length <= 0
+                && this.uniqLabels.length > 0
+                && totalActiveLabels.length >= 1) {
                 isVisible = false;
             }
 
@@ -82,6 +88,10 @@ export default class TodoStore {
     }
 
     subscribeServerToStore() {
+        /*
+         * FIXME This sometimes crashes on account of circular references.
+         *       Would be interesting to investigate with a repro.
+         */
         reaction(
             () => this.toJS(),
             todos => window.fetch && fetch('/api/todos', {

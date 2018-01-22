@@ -9,21 +9,12 @@ export default class TodoModel {
     @observable title;
     @observable completed;
     @observable labels = [];
-    //@observable labels = observable([new LabelModel(this, Utils.uuid(), "xxx", true)]);
 
     constructor(store, id, title, completed) {
         this.store = store;
         this.id = id;
         this.title = title;
         this.completed = completed;
-        /*
-        [
-            {caption:'baz',active:false},
-            {caption:'quux',active:true},
-            {caption:'xyzzy',active:false},
-        ].map(l => this.addLabel(l.caption, l.active));
-        */
-
     }
 
     @computed get getLabels() {
@@ -43,7 +34,6 @@ export default class TodoModel {
     }
 
     addLabel(caption, active) {
-        console.log("addLabel(%s, %s)", caption, active);
 
         // Safely default to false if no 'active' bool parameter specified
         active = typeof(active) == 'undefined' ? false : active;
