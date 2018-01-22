@@ -22,17 +22,19 @@ export default class TodoFilter extends React.Component {
                     {this.renderFilterLink(ALL_TODOS, "", "All")}
                     {this.renderFilterLink(ACTIVE_TODOS, "active", "Active")}
                     {this.renderFilterLink(COMPLETED_TODOS, "completed", "Completed")}
-                </ul>
                 {/* FIXME The styling on this item is broken (repro: mark a todo item
                   * as "completed" */}
                 { todoStore.completedCount === 0
                     ? null
-                    :     <button
-                            className="clear-completed"
-                            onClick={this.clearCompleted}>
-                            Clear completed
-                        </button>
+                    :     <li>
+                            <button
+                                className="clear-completed"
+                                onClick={this.clearCompleted}>
+                                Clear completed
+                            </button>
+                          </li>
                 }
+                </ul>
             </div>
         );
     }

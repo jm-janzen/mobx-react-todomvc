@@ -1,7 +1,6 @@
 import {observable, computed, reaction} from 'mobx';
 import TodoModel from '../models/TodoModel'
 import * as Utils from '../utils';
-import util from 'util';
 import { ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
 
 
@@ -85,28 +84,6 @@ export default class TodoStore {
             console.log(todo.title, "is"+(isVisible ? "" : "n't"), "visible");
             return isVisible;
         });
-    }
-
-    subscribeServerToStore() {
-        /*
-         * FIXME This sometimes crashes on account of circular references.
-         *       Would be interesting to investigate with a repro.
-         */
-        reaction(
-            () => this.toJS(),
-            todos => window.fetch && fetch('/api/todos', {
-                method: 'post',
-                body: JSON.stringify({ todos }),
-                headers: new Headers({ 'Content-Type': 'application/json' })
-            })
-        );
-    }
-
-    subscribeLocalstorageToStore() {
-        reaction(
-            () => this.toJS(),
-            todos => localStorage.setItem('mobx-react-todomvc-todos', JSON.stringify({ todos }))
-        );
     }
 
     addTodo (title) {
