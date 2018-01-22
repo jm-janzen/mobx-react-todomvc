@@ -26,14 +26,17 @@ export default class TodoStore {
         return this.uniqLabels.filter(l=> l.active).length;
     }
 
-    // Just drill down to individual getters on our todos
-    // XXX Is dereferencing here breaking our store on refresh ?
+    @computed get labels () {
+        return this.todos.filter(todo => todo.getLabels)
+    }
+
     @computed get uniqLabels () {
-        console.log("TodoStore::get uniqLabels");
         var seen = [];
         var uniqLabels = [];
 
-        // XXX There's got to be a more semantic way to do this ...
+        // Just drill down to individual getters on our todos
+        // FIXME This could be much more semantic, with fewer
+        //       unnecessary intermediate variables.
         this.todos.filter(todo => {
             todo.uniqLabels.filter(label => {
                 if (seen.includes(label.caption)) return false
@@ -43,28 +46,15 @@ export default class TodoStore {
             })
         });
 
-        console.log("\tret",uniqLabels)
         return uniqLabels;
     }
 
     // This view/store coupling feels bad ...
     getVisibleTodos(view) {
-        console.log("getVisibleTodos()");
+
+        var totalActiveLabels = this.uniqLabels.filter(l => l.active).length > 0;
 
         return this.todos.filter(todo => {
-
-            /*
-             * TODO
-             *      1. [GENERAL]  if no labels active,
-             *         show all
-             *
-             *      2. [SPECIFIC] if individual todo does not
-             *         have any active labels, do not
-             *         show it.
-             *
-             * XXX This may not be the best place to do this,
-             *     maybe check out individual todoItems
-             */
 
             var isVisible = true
             switch (view.todoFilter) {
@@ -76,21 +66,17 @@ export default class TodoStore {
                     break;
             }
 
-            var hasActiveLabel = todo.labels.filter((l) =>
-                this.uniqLabels.filter((ul) =>
-                    l.caption === ul.caption
-                )
-            ).length;
-            var totalActiveLabels = this.uniqLabels.filter((ul) => ul.active).length;
-            console.log("totalUniqLabels:", totalActiveLabels);
-            console.log("activeLabels:", hasActiveLabel)
-            hasActiveLabel = hasActiveLabel > 0;
-            console.log("hasActiveLabel:", hasActiveLabel)
+            /* Is visible only if:
+             *  1. no global labels defined at all
+             *  2. no global labels are active
+             *  3. this individual Item has a label which is active
+             */
+            var hasActiveLabel = todo.labels.filter(l => l.active).length > 0;
+            if ( !hasActiveLabel && this.uniqLabels.length > 0 && totalActiveLabels) {
+                isVisible = false;
+            }
 
-            console.log( !hasActiveLabel, '&&', this.uniqLabels.length, '> 0 &&', totalActiveLabels, '>= 1');
-            if ( !hasActiveLabel && this.uniqLabels.length > 0 && totalActiveLabels >= 1) isVisible = false;
-
-            console.log('\t',todo.title, "is"+(isVisible ? "" : "n't"), "visible");
+            console.log(todo.title, "is"+(isVisible ? "" : "n't"), "visible");
             return isVisible;
         });
     }

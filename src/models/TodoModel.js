@@ -26,7 +26,10 @@ export default class TodoModel {
 
     }
 
-    // Dump uniq labels
+    @computed get getLabels() {
+        return this.labels;
+    }
+
     @computed get uniqLabels() {
         return this.labels.filter((label, i, a) =>
             i === a.findIndex((l) => (
@@ -42,7 +45,7 @@ export default class TodoModel {
     addLabel(caption, active) {
         console.log("addLabel(%s, %s)", caption, active);
 
-        // Safely default to false if no second parameter
+        // Safely default to false if no 'active' bool parameter specified
         active = typeof(active) == 'undefined' ? false : active;
 
         this.labels.push(new LabelModel(this, Utils.uuid(), caption, active));

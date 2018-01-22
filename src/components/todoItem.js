@@ -62,9 +62,7 @@ export default class TodoItem extends React.Component {
     handleLabelPrompt = () => {
         var val = prompt("Enter new label");
         if (val) {
-            this.props.todo.addLabel(val, true);  // XXX This does not update view
-        } else {  // TODO Handle destroy label
-            pass;
+            this.props.todo.addLabel(val);
         }
     }
 

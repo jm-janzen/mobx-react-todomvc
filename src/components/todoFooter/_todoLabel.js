@@ -24,13 +24,13 @@ export default class TodoLabel extends React.Component {
 
     }
     handleToggle = () => {
-        // @observable tabelsActive=[];
-        console.log(this.props.viewStore.labelsActive);
+        /*
+         * NOTE: This exists only to get MobX to track these deeply nested updates
+         */
         if (!this.props.viewStore.labelsActive.includes(this.props.label)) {
-
-            console.log("Adding to view:", this.props.label);
             this.props.viewStore.labelsActive.push(this.props.label);
         }
+
         this.props.label.toggle();
     };
 }

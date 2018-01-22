@@ -10,8 +10,6 @@ export default class TodoLabelList extends React.Component {
 
         const {viewStore, todoStore} = this.props;
 
-        console.log("Rendering TodoLabelList",todoStore.uniqLabels)
-
         if (todoStore.uniqLabels.length < 1) return null
 
         // TODO Move this to CSS
