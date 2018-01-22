@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {observable, expr} from 'mobx';
+import {observable, expr, autorun} from 'mobx';
 
 const ESCAPE_KEY = 27;
 const ENTER_KEY = 13;
@@ -12,6 +12,7 @@ export default class TodoItem extends React.Component {
 
     render() {
         const {viewStore, todo} = this.props;
+
         return (
             <li className={[
                 todo.completed ? "completed": "",
@@ -27,7 +28,15 @@ export default class TodoItem extends React.Component {
                     <label onDoubleClick={this.handleEdit}>
                         {todo.title}
                     </label>
-                    <button className="destroy" onClick={this.handleDestroy} />
+                    <div className="labels">
+                    { // TODO Add destroy 'x'
+                        todo.uniqLabels.map((label, i) =>
+                            <span key={i}>{label.caption}</span>)
+                    }
+                    </div>
+
+                    <button className="create"  title="add new label" onClick={this.handleLabelPrompt}/>
+                    <button className="destroy" title="delete this TODO item" onClick={this.handleDestroy}/>
                 </div>
                 <input
                     ref="editField"
@@ -39,6 +48,14 @@ export default class TodoItem extends React.Component {
                 />
             </li>
         );
+    }
+
+    // New label alert input
+    handleLabelPrompt = () => {
+        var val = prompt("Enter new label");
+        if (val) {
+            this.props.todo.addLabel(val);
+        }
     }
 
     handleSubmit = (event) => {

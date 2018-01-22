@@ -9,6 +9,7 @@ import TodoItem from './todoItem';
 export default class TodoOverview extends React.Component {
     render() {
         const {todoStore, viewStore} = this.props;
+
         if (todoStore.todos.length === 0)
             return null;
         return <section className="main">
@@ -31,16 +32,7 @@ export default class TodoOverview extends React.Component {
     }
 
     getVisibleTodos() {
-        return this.props.todoStore.todos.filter(todo => {
-            switch (this.props.viewStore.todoFilter) {
-                case ACTIVE_TODOS:
-                    return !todo.completed;
-                case COMPLETED_TODOS:
-                    return todo.completed;
-                default:
-                    return true;
-            }
-        });
+        return this.props.todoStore.getVisibleTodos(this.props.viewStore.todoFilter);
     }
 
     toggleAll = (event) => {

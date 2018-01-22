@@ -5,7 +5,7 @@ import {pluralize} from '../../utils';
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../../constants';
 
 @observer
-export default class TodoItem extends React.Component {
+export default class TodoFilter extends React.Component {
     render() {
         const todoStore = this.props.todoStore;
         if (!todoStore.activeTodoCount && !todoStore.completedCount)
@@ -14,7 +14,7 @@ export default class TodoItem extends React.Component {
         const activeTodoWord = pluralize(todoStore.activeTodoCount, 'item');
 
         return (
-            <footer className="footer">
+            <div>
                 <span className="todo-count">
                     <strong>{todoStore.activeTodoCount}</strong> {activeTodoWord} left
                 </span>
@@ -22,16 +22,20 @@ export default class TodoItem extends React.Component {
                     {this.renderFilterLink(ALL_TODOS, "", "All")}
                     {this.renderFilterLink(ACTIVE_TODOS, "active", "Active")}
                     {this.renderFilterLink(COMPLETED_TODOS, "completed", "Completed")}
-                </ul>
+                {/* FIXME The styling on this item is broken (repro: mark a todo item
+                  * as "completed" */}
                 { todoStore.completedCount === 0
                     ? null
-                    :     <button
-                            className="clear-completed"
-                            onClick={this.clearCompleted}>
-                            Clear completed
-                        </button>
+                    :     <li>
+                            <button
+                                className="clear-completed"
+                                onClick={this.clearCompleted}>
+                                Clear completed
+                            </button>
+                          </li>
                 }
-            </footer>
+                </ul>
+            </div>
         );
     }
 
