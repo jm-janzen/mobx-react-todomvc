@@ -1,19 +1,29 @@
-import {observable, computed, reaction} from 'mobx';
+import {observable, computed, action, reaction} from 'mobx';
+import LabelModel from '../models/LabelModel'
+import * as Utils from '../utils';
+import util from 'util';
 
 export default class TodoModel {
     store;
     id;
     @observable title;
     @observable completed;
-    @observable labels = [];  // XXX Any change ...?
+    @observable labels = [];
+    //@observable labels = observable([new LabelModel(this, Utils.uuid(), "xxx", true)]);
 
     constructor(store, id, title, completed) {
         this.store = store;
         this.id = id;
         this.title = title;
         this.completed = completed;
+        /*
+        [
+            {caption:'baz',active:false},
+            {caption:'quux',active:true},
+            {caption:'xyzzy',active:false},
+        ].map(l => this.addLabel(l.caption, l.active));
+        */
 
-        this.labels = [{caption:'baz',active:true}];  // XXX Init our observable arr with dummy val for debugging
     }
 
     // Dump uniq labels
@@ -25,8 +35,17 @@ export default class TodoModel {
         )
     }
 
+    @computed get activeLabels() {
+        return this.labels.filter(label => label.active);
+    }
+
     addLabel(caption, active) {
-        this.labels.push({caption: caption, active: active});
+        console.log("addLabel(%s, %s)", caption, active);
+
+        // Safely default to false if no second parameter
+        active = typeof(active) == 'undefined' ? false : active;
+
+        this.labels.push(new LabelModel(this, Utils.uuid(), caption, active));
     }
 
     toggle() {

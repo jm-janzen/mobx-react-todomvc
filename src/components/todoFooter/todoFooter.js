@@ -5,6 +5,7 @@ import {pluralize} from '../../utils';
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../../constants';
 import TodoFilter from './_todoFilter';
 import TodoLabel from './_todoLabel';
+import TodoLabelList from './_todoLabelList';
 
 @observer
 export default class TodoFooter extends React.Component {
@@ -14,18 +15,11 @@ export default class TodoFooter extends React.Component {
             return null;
         }
 
-        /*
-         * TODO: Investigate best-practice:
-         *  - Pass entire store (rename class, gross)
-         *  - Loop over stores objects
-         *
-         *  NOTE: Both of these will require ref to labels/tags
-         */
         return (
             <footer className="footer">
                 <TodoFilter todoStore={todoStore} viewStore={viewStore} />
                 {/* TODO Add some style hr elem here */}
-                <TodoLabel  todoStore={todoStore} viewStore={viewStore} />
+                <TodoLabelList  todoStore={todoStore} viewStore={viewStore} />
             </footer>
         )
     }

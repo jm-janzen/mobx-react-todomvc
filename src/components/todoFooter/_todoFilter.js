@@ -4,10 +4,6 @@ import {observer} from 'mobx-react';
 import {pluralize} from '../../utils';
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../../constants';
 
-/*
- * TODO Rename this child component - we already have a TodoItem up a level
- */
-
 @observer
 export default class TodoFilter extends React.Component {
     render() {

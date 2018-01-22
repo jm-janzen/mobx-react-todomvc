@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {observable, expr} from 'mobx';
+import {observable, expr, autorun} from 'mobx';
 
 const ESCAPE_KEY = 27;
 const ENTER_KEY = 13;
@@ -11,7 +11,7 @@ export default class TodoItem extends React.Component {
     @observable editText = "";
 
     render() {
-        const {viewStore, todo, todoStore} = this.props;
+        const {viewStore, todo} = this.props;
 
         return (
             <li className={[
@@ -31,14 +31,15 @@ export default class TodoItem extends React.Component {
                     { /* Our labels (if any) */}
                     <div className="labels">
                     {
+                        // TODO Add destroy 'x'
                         todo.uniqLabels.map((label, i) =>
                             <span key={i}>{label.caption}</span>)
                     }
                     </div>
 
                     { /* XXX Our button to add new labels */}
-                    <button className="create" onClick={this.handleLabelPrompt}/>
-                    <button className="destroy" onClick={this.handleDestroy}/>
+                    <button className="create"  title="add new label" onClick={this.handleLabelPrompt}/>
+                    <button className="destroy" title="delete this TODO item" onClick={this.handleDestroy}/>
                 </div>
                 <input
                     ref="editField"
@@ -70,7 +71,7 @@ export default class TodoItem extends React.Component {
     handleSubmit = (event) => {
         const val = this.editText.trim();
         if (val) {
-            this.props.todo.setTitle(val);
+            this.props.todo.setTitle(val);  // XXX How get this ???
             this.editText = val;
         } else {
             this.handleDestroy();

@@ -1,6 +1,7 @@
 import {observable, computed, reaction} from 'mobx';
 import TodoModel from '../models/TodoModel'
 import * as Utils from '../utils';
+import { ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
 
 
 export default class TodoStore {
@@ -28,6 +29,7 @@ export default class TodoStore {
     // Just drill down to individual getters on our todos
     // XXX Is dereferencing here breaking our store on refresh ?
     @computed get uniqLabels () {
+        console.log("TodoStore::get uniqLabels");
         var seen = [];
         var uniqLabels = [];
 
@@ -41,7 +43,56 @@ export default class TodoStore {
             })
         });
 
+        console.log("\tret",uniqLabels)
         return uniqLabels;
+    }
+
+    // This view/store coupling feels bad ...
+    getVisibleTodos(view) {
+        console.log("getVisibleTodos()");
+
+        return this.todos.filter(todo => {
+
+            /*
+             * TODO
+             *      1. [GENERAL]  if no labels active,
+             *         show all
+             *
+             *      2. [SPECIFIC] if individual todo does not
+             *         have any active labels, do not
+             *         show it.
+             *
+             * XXX This may not be the best place to do this,
+             *     maybe check out individual todoItems
+             */
+
+            var isVisible = true
+            switch (view.todoFilter) {
+                case ACTIVE_TODOS:
+                    isVisible = !todo.completed;
+                    break;
+                case COMPLETED_TODOS:
+                    isVisible = todo.completed;
+                    break;
+            }
+
+            var hasActiveLabel = todo.labels.filter((l) =>
+                this.uniqLabels.filter((ul) =>
+                    l.caption === ul.caption
+                )
+            ).length;
+            var totalActiveLabels = this.uniqLabels.filter((ul) => ul.active).length;
+            console.log("totalUniqLabels:", totalActiveLabels);
+            console.log("activeLabels:", hasActiveLabel)
+            hasActiveLabel = hasActiveLabel > 0;
+            console.log("hasActiveLabel:", hasActiveLabel)
+
+            console.log( !hasActiveLabel, '&&', this.uniqLabels.length, '> 0 &&', totalActiveLabels, '>= 1');
+            if ( !hasActiveLabel && this.uniqLabels.length > 0 && totalActiveLabels >= 1) isVisible = false;
+
+            console.log('\t',todo.title, "is"+(isVisible ? "" : "n't"), "visible");
+            return isVisible;
+        });
     }
 
     subscribeServerToStore() {
