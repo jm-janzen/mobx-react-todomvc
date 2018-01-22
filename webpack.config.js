@@ -21,6 +21,9 @@ module.exports = {
       __CLIENT__: JSON.stringify(true),
       __SERVER__: JSON.stringify(false),
     }),
+    new webpack.LoaderOptionsPlugin({
+        debug: true
+    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx']

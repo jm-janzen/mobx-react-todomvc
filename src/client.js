@@ -10,11 +10,9 @@ const initialState = window.initialState && JSON.parse(window.initialState) || {
 var todoStore = TodoStore.fromJS(initialState.todos || []);
 var viewStore = new ViewStore();
 
-todoStore.subscribeServerToStore();
-
 ReactDOM.render(
-	<TodoApp todoStore={todoStore} viewStore={viewStore}/>,
-	document.getElementById('todoapp')
+    <TodoApp todoStore={todoStore} viewStore={viewStore}/>,
+    document.getElementById('todoapp')
 );
 
 if (module.hot) {
