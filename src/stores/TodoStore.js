@@ -49,15 +49,20 @@ export default class TodoStore {
         return uniqLabels;
     }
 
-    // This view/store coupling feels bad ...
-    getVisibleTodos(view) {
+    /*
+     * Assumes item is visible - performs tests using filters, labels
+     * to determine if it is not.
+     */
+    getVisibleTodos(filterSelected) {
 
         var totalActiveLabels = this.uniqLabels.filter(l => l.active);
 
         return this.todos.filter(todo => {
 
             var isVisible = true
-            switch (view.todoFilter) {
+
+            // Check if we have selected "all", "active", or "completed" items
+            switch (filterSelected) {
                 case ACTIVE_TODOS:
                     isVisible = !todo.completed;
                     break;
@@ -66,18 +71,16 @@ export default class TodoStore {
                     break;
             }
 
-            /* Is visible only if:
-             *  1. no global labels defined at all
-             *  2. no global labels are active
-             *  3. this individual Item has a label which is active
-             *
-             *  FIXME Duplicate labels are not detected (only on last item added)
-             */
-            var activeLabels = todo.labels.filter(l => l.active);
+            // Check if this item has any matching labels (which are active)
+            var hasMatchingCaptions = todo.labels.filter(l =>
+                totalActiveLabels.map(al => al.caption ).includes(l.caption)
+            ).length > 0;
 
-            if ( activeLabels.length <= 0
-                && this.uniqLabels.length > 0
-                && totalActiveLabels.length >= 1) {
+            /* Is visible only if:
+             *  1. no global labels are active at all
+             *  2. this individual item has a label which is active
+             */
+            if ( totalActiveLabels.length > 0 && ! hasMatchingCaptions) {
                 isVisible = false;
             }
 
